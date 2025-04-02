@@ -11,23 +11,33 @@ func Parse(str string) (DataPointer, error) {
 }
 
 func parse(lexer Lexer) (DataPointer, error) {
+
 	var segments []Segment
 	for {
+		// are we at the End?
+		ok, err := check(lexer, TokenEndOfStream)
+		if err != nil {
+			return DataPointer{}, err
+		}
+		if ok {
+			break
+		}
+
+		// check for the slash
+		ok, err = eat(lexer, TokenSlash)
+		if err != nil {
+			return DataPointer{}, err
+		}
+		if !ok {
+			return DataPointer{}, fmt.Errorf("segments must be prefixed with a slash ('/')")
+		}
+
 		// can be a single segment
 		segment, err := parseSegment(lexer)
 		if err != nil {
 			return DataPointer{}, err
 		}
 		segments = append(segments, segment)
-
-		// or multiple
-		ok, err := eat(lexer, TokenSlash)
-		if err != nil {
-			return DataPointer{}, err
-		}
-		if !ok {
-			break
-		}
 	}
 	return DataPointer{
 		Segments: segments,
@@ -123,6 +133,14 @@ func expect(lexer Lexer, ty TokenType) (*Token, error) {
 		return nil, parseError(tok, TokenName)
 	}
 	return tok, nil
+}
+
+func check(lexer Lexer, ty TokenType) (bool, error) {
+	tok, err := lexer.Peek()
+	if err != nil {
+		return false, err
+	}
+	return tok.Type == ty, nil
 }
 
 func parseError(tok *Token, expected TokenType) error {
