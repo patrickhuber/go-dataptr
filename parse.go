@@ -13,7 +13,8 @@ func Parse(str string) (DataPointer, error) {
 func parse(lexer Lexer) (DataPointer, error) {
 
 	var segments []Segment
-	for {
+	for i := 0; ; i++ {
+
 		// are we at the End?
 		ok, err := check(lexer, TokenEndOfStream)
 		if err != nil {
@@ -30,6 +31,18 @@ func parse(lexer Lexer) (DataPointer, error) {
 		}
 		if !ok {
 			return DataPointer{}, fmt.Errorf("segments must be prefixed with a slash ('/')")
+		}
+
+		// first run only, we can have root document '/'
+		if i == 0 {
+			// are we at the End?
+			ok, err := check(lexer, TokenEndOfStream)
+			if err != nil {
+				return DataPointer{}, err
+			}
+			if ok {
+				break
+			}
 		}
 
 		// can be a single segment

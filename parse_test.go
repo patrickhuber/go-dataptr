@@ -14,7 +14,7 @@ func TestParse(t *testing.T) {
 		ptr  dataptr.DataPointer
 	}
 	tests := []test{
-
+		{"root", "/", dataptr.DataPointer{}},
 		{"name", "/name", dataptr.DataPointer{
 			Segments: []dataptr.Segment{
 				dataptr.Element{
@@ -63,7 +63,7 @@ func TestParse(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			actual, err := dataptr.Parse(test.str)
 			if err != nil {
-				t.Fatalf("excected err to be nil")
+				t.Fatalf("excected err to be nil. %v", err)
 			}
 			if !reflect.DeepEqual(test.ptr, actual) {
 				t.Fatalf("expcected to equal actual")
