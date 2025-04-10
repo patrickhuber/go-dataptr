@@ -17,13 +17,13 @@ type Segment interface {
 
 type Constraint struct {
 	Segment
-	Value string
-	Key   string
+	Value any
+	Key   any
 }
 
-type Element struct {
+type Key struct {
 	Segment
-	Name string
+	Key any
 }
 
 type Index struct {
@@ -46,8 +46,8 @@ func (c Constraint) String() string {
 	return fmt.Sprintf("%s=%s", c.Key, c.Value)
 }
 
-func (e Element) String() string {
-	return e.Name
+func (e Key) String() string {
+	return fmt.Sprintf("%v", e.Key)
 }
 
 func (i Index) String() string {

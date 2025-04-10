@@ -17,8 +17,8 @@ func TestParse(t *testing.T) {
 
 		{"name", "name", dataptr.DataPointer{
 			Segments: []dataptr.Segment{
-				dataptr.Element{
-					Name: "name",
+				dataptr.Key{
+					Key: "name",
 				},
 			},
 		}},
@@ -39,18 +39,18 @@ func TestParse(t *testing.T) {
 		}},
 		{"multi name", "parent/child", dataptr.DataPointer{
 			Segments: []dataptr.Segment{
-				dataptr.Element{
-					Name: "parent",
+				dataptr.Key{
+					Key: "parent",
 				},
-				dataptr.Element{
-					Name: "child",
+				dataptr.Key{
+					Key: "child",
 				},
 			},
 		}},
 		{"name constraint", "name/key=value", dataptr.DataPointer{
 			Segments: []dataptr.Segment{
-				dataptr.Element{
-					Name: "name",
+				dataptr.Key{
+					Key: "name",
 				},
 				dataptr.Constraint{
 					Key:   "key",

@@ -63,8 +63,8 @@ func parseSegment(lexer Lexer) (Segment, error) {
 		return nil, err
 	}
 	if !ok {
-		return Element{
-			Name: name,
+		return Key{
+			Key: name,
 		}, nil
 	}
 
