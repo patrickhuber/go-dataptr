@@ -14,22 +14,22 @@ func TestParse(t *testing.T) {
 		ptr  dataptr.DataPointer
 	}
 	tests := []test{
-
-		{"name", "name", dataptr.DataPointer{
+		{"root", "/", dataptr.DataPointer{}},
+		{"name", "/name", dataptr.DataPointer{
 			Segments: []dataptr.Segment{
 				dataptr.Key{
 					Key: "name",
 				},
 			},
 		}},
-		{"index", "0", dataptr.DataPointer{
+		{"index", "/0", dataptr.DataPointer{
 			Segments: []dataptr.Segment{
 				dataptr.Index{
 					Index: 0,
 				},
 			},
 		}},
-		{"constraint", "key=value", dataptr.DataPointer{
+		{"constraint", "/key=value", dataptr.DataPointer{
 			Segments: []dataptr.Segment{
 				dataptr.Constraint{
 					Key:   "key",
@@ -37,7 +37,7 @@ func TestParse(t *testing.T) {
 				},
 			},
 		}},
-		{"multi name", "parent/child", dataptr.DataPointer{
+		{"multi name", "/parent/child", dataptr.DataPointer{
 			Segments: []dataptr.Segment{
 				dataptr.Key{
 					Key: "parent",
@@ -47,7 +47,7 @@ func TestParse(t *testing.T) {
 				},
 			},
 		}},
-		{"name constraint", "name/key=value", dataptr.DataPointer{
+		{"name constraint", "/name/key=value", dataptr.DataPointer{
 			Segments: []dataptr.Segment{
 				dataptr.Key{
 					Key: "name",
@@ -63,10 +63,29 @@ func TestParse(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			actual, err := dataptr.Parse(test.str)
 			if err != nil {
-				t.Fatalf("excected err to be nil")
+				t.Fatalf("excected err to be nil. %v", err)
 			}
 			if !reflect.DeepEqual(test.ptr, actual) {
 				t.Fatalf("expcected to equal actual")
+			}
+		})
+	}
+}
+
+func TestParseFail(t *testing.T) {
+	type test struct {
+		name string
+		str  string
+	}
+	tests := []test{
+		{"no_slash", "a"},
+		{"no_slash_int", "0"},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			_, err := dataptr.Parse(test.str)
+			if err == nil {
+				t.Fatal("expected test to fail")
 			}
 		})
 	}
