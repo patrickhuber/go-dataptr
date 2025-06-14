@@ -21,14 +21,26 @@ type Constraint struct {
 	Key   any
 }
 
+func (c Constraint) String() string {
+	return fmt.Sprintf("%s=%s", c.Key, c.Value)
+}
+
 type Key struct {
 	Segment
 	Key any
 }
 
+func (e Key) String() string {
+	return fmt.Sprintf("%v", e.Key)
+}
+
 type Index struct {
 	Segment
 	Index int
+}
+
+func (i Index) String() string {
+	return strconv.Itoa(i.Index)
 }
 
 func (dp DataPointer) String() string {
@@ -40,16 +52,4 @@ func (dp DataPointer) String() string {
 		builder.WriteString(seg.String())
 	}
 	return builder.String()
-}
-
-func (c Constraint) String() string {
-	return fmt.Sprintf("%s=%s", c.Key, c.Value)
-}
-
-func (e Key) String() string {
-	return fmt.Sprintf("%v", e.Key)
-}
-
-func (i Index) String() string {
-	return strconv.Itoa(i.Index)
 }
