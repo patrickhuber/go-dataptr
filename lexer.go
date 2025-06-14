@@ -76,13 +76,17 @@ func (l *lexer) next() (*Token, error) {
 		}
 		return l.token(TokenInteger)
 
-	case l.isLetter(r):
-		if err := l.eatWhile(l.isLetter); err != nil {
+	case l.isLetterOrUnderscore(r):
+		if err := l.eatWhile(l.isLetterOrUnderscore); err != nil {
 			return nil, err
 		}
 		return l.token(TokenName)
 	}
 	return nil, fmt.Errorf("unrecognized token at position %d", l.position)
+}
+
+func (l *lexer) isLetterOrUnderscore(ch rune) bool {
+	return ch == '_' || l.isLetter(ch)
 }
 
 func (l *lexer) isLetter(ch rune) bool {
