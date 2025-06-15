@@ -43,6 +43,14 @@ func (i Index) String() string {
 	return strconv.Itoa(i.Index)
 }
 
+type Dash struct {
+	Segment
+}
+
+func (d Dash) String() string {
+	return "-"
+}
+
 func (dp DataPointer) String() string {
 	builder := strings.Builder{}
 	for i, seg := range dp.Segments {

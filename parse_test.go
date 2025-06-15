@@ -58,6 +58,24 @@ func TestParse(t *testing.T) {
 				},
 			},
 		}},
+		{"name index", "/name/0", dataptr.DataPointer{
+			Segments: []dataptr.Segment{
+				dataptr.Key{
+					Key: "name",
+				},
+				dataptr.Index{
+					Index: 0,
+				},
+			},
+		}},
+		{"name dash", "/name/-", dataptr.DataPointer{
+			Segments: []dataptr.Segment{
+				dataptr.Key{
+					Key: "name",
+				},
+				dataptr.Dash{},
+			},
+		}},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {

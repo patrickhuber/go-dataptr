@@ -70,6 +70,7 @@ func (l *lexer) next() (*Token, error) {
 			return nil, err
 		}
 		return l.token(TokenEqual)
+
 	case l.isNumber(r):
 		if err := l.eatWhile(l.isNumber); err != nil {
 			return nil, err
@@ -81,6 +82,10 @@ func (l *lexer) next() (*Token, error) {
 			return nil, err
 		}
 		return l.token(TokenName)
+	case r == '-':
+		if err := l.expect('-'); err != nil {
+		}
+		return l.token(TokenDash)
 	}
 	return nil, fmt.Errorf("unrecognized token at position %d", l.position)
 }

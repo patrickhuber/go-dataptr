@@ -74,6 +74,15 @@ func parseSegment(lexer Lexer) (Segment, error) {
 		}, nil
 	}
 
+	// we have a dash
+	if tok.Type == TokenDash {
+		_, err := lexer.Next()
+		if err != nil {
+			return nil, err
+		}
+		return Dash{}, nil
+	}
+
 	// otherwise this is a name
 	name, err := parseName(lexer)
 	if err != nil {

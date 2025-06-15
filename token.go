@@ -8,6 +8,7 @@ const (
 	TokenEqual       TokenType = "="
 	TokenSlash       TokenType = "/"
 	TokenEndOfStream TokenType = "EOF"
+	TokenDash        TokenType = "-"
 )
 
 type Token struct {

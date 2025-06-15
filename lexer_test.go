@@ -31,6 +31,19 @@ func TestLexer(t *testing.T) {
 		{"underscore", "name_with_underscore", []dataptr.TokenType{
 			dataptr.TokenName,
 		}},
+		{"integer", "123", []dataptr.TokenType{
+			dataptr.TokenInteger,
+		}},
+		{"integer with name", "123/name", []dataptr.TokenType{
+			dataptr.TokenInteger,
+			dataptr.TokenSlash,
+			dataptr.TokenName,
+		}},
+		{"dash", "name/-", []dataptr.TokenType{
+			dataptr.TokenName,
+			dataptr.TokenSlash,
+			dataptr.TokenDash,
+		}},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
