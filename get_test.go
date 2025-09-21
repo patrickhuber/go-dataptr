@@ -18,12 +18,48 @@ func TestGet(t *testing.T) {
 	}
 
 	tests := []test{
-		{name: "map", obj: map[string]any{"hello": "world"}, path: "/hello", expected: "world"},
-		{name: "nested_map", obj: map[string]any{"hello": map[string]any{"good": "world"}}, path: "/hello/good", expected: "world"},
-		{name: "map_key_not_found", obj: map[string]any{}, path: "/hello", err: fmt.Errorf("not found")},
-		{name: "slice_index", obj: []any{"hello", "world"}, path: "/0", expected: "hello"},
-		{name: "slice_index_oob", obj: []any{"hello", "world"}, path: "/3", err: fmt.Errorf("out of bounds")},
-		{name: "constraint", obj: []any{map[string]any{"hello": "world"}, map[string]any{"key": "value"}}, path: "/hello=world/hello", expected: "world"},
+		{
+			name:     "map",
+			obj:      map[string]any{"hello": "world"},
+			path:     "/hello",
+			expected: "world",
+		},
+		{
+			name:     "string_map",
+			obj:      map[string]string{"hello": "world"},
+			path:     "/hello",
+			expected: "world",
+		},
+		{
+			name:     "nested_map",
+			obj:      map[string]any{"hello": map[string]any{"good": "world"}},
+			path:     "/hello/good",
+			expected: "world",
+		},
+		{
+			name: "map_key_not_found",
+			obj:  map[string]any{},
+			path: "/hello",
+			err:  fmt.Errorf("not found"),
+		},
+		{
+			name:     "slice_index",
+			obj:      []any{"hello", "world"},
+			path:     "/0",
+			expected: "hello",
+		},
+		{
+			name: "slice_index_oob",
+			obj:  []any{"hello", "world"},
+			path: "/3",
+			err:  fmt.Errorf("out of bounds"),
+		},
+		{
+			name:     "constraint",
+			obj:      []any{map[string]any{"hello": "world"}, map[string]any{"key": "value"}},
+			path:     "/hello=world/hello",
+			expected: "world",
+		},
 	}
 
 	for _, test := range tests {

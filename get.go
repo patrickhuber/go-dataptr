@@ -2,6 +2,7 @@ package dataptr
 
 import (
 	"fmt"
+	"reflect"
 )
 
 type NotFoundError struct {
@@ -72,21 +73,25 @@ func get(dataPtr DataPointer, obj any) (any, error) {
 			}
 
 		case Key:
+			t := reflect.TypeOf(current)
+
 			// current must be a map
-			m, ok := current.(map[string]any)
-			if !ok {
+			if t.Kind() != reflect.Map {
 				return nil, fmt.Errorf("key segments require a map object. Found %T", current)
 			}
-			// key must be a string (for now)
-			k, ok := s.Key.(string)
-			if !ok {
-				return nil, fmt.Errorf("key segments require a string key object. Found %T", s.Key)
+			// current must be a map with string keys
+			switch t.Key().Kind() {
+			case reflect.String:
+				// ok
+			default:
+				return nil, fmt.Errorf("key segments require a map with string keys. Found %v", t.Key().Kind())
 			}
-			v, ok := m[k]
-			if !ok {
-				return nil, fmt.Errorf("unable to find key '%s' in object", k)
+			// if the map is empty, return the empty value for the map's element type
+			if reflect.ValueOf(current).Len() == 0 {
+				return reflect.Zero(t.Elem()).Interface(), nil
 			}
-			current = v
+			// set current to the value for the key
+			current = reflect.ValueOf(current).MapIndex(reflect.ValueOf(s.Key)).Interface()
 		}
 	}
 	return current, nil
