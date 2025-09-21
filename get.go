@@ -87,11 +87,15 @@ func get(dataPtr DataPointer, obj any) (any, error) {
 				return nil, fmt.Errorf("key segments require a map with string keys. Found %v", t.Key().Kind())
 			}
 			// if the map is empty, return the empty value for the map's element type
-			if reflect.ValueOf(current).Len() == 0 {
+			currentValue := reflect.ValueOf(current)
+			if currentValue.Len() == 0 {
 				return reflect.Zero(t.Elem()).Interface(), nil
 			}
-			// set current to the value for the key
-			current = reflect.ValueOf(current).MapIndex(reflect.ValueOf(s.Key)).Interface()
+			mapValue := currentValue.MapIndex(reflect.ValueOf(s.Key))
+			if !mapValue.IsValid() {
+				return nil, fmt.Errorf("key %v not found", s.Key)
+			}
+			current = mapValue.Interface()
 		}
 	}
 	return current, nil

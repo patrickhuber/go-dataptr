@@ -60,6 +60,12 @@ func TestGet(t *testing.T) {
 			path:     "/hello=world/hello",
 			expected: "world",
 		},
+		{
+			name: "missing_key_returns_not_found",
+			obj:  map[string]any{"hello": "world"},
+			path: "/good",
+			err:  fmt.Errorf("not found"),
+		},
 	}
 
 	for _, test := range tests {
